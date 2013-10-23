@@ -2,6 +2,8 @@
 
 WDIProjecttwo::Application.routes.draw do
 
+	#get 'registrants' => 'registrants#index'
+	#get 'registrants/:id' => 'registrants#show'
 	#sign in/out
 	get 	'login' => 'session#new'
 	post 	'login' => 'session#create'

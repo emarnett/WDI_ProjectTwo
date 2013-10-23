@@ -1,0 +1,12 @@
+doctype html
+html
+  head
+    title WDIProjecttwo
+    = csrf_meta_tags
+
+    = stylesheet_link_tag    "application", media: "all"
+  body
+    == yield
+
+    = javascript_include_tag "application"
+
