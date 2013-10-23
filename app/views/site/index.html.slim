@@ -1,0 +1,16 @@
+.row
+  .col-lg-6.col-lg-offset-3
+	h1 Hi...
+	table.table.table-bordered.table-striped
+	  caption Our users!
+	  thead
+	    tr
+	      th Name
+	      th Email
+	      th Created at
+	  tbody
+		- @users.each do |user|
+		  tr
+			th #{user.name}
+			td #{user.email}
+			td #{user.created_at}

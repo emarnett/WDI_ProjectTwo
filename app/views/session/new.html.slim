@@ -1,0 +1,48 @@
+doctype
+html
+  head
+    title Sign in :: Project 2
+  body
+    #wrap
+      /! Fixed navbar
+      .navbar.navbar-inverse.navbar-fixed-top
+        .container
+          .navbar-header
+            button.navbar-toggle data-target=".navbar-collapse" data-toggle="collapse" type="button"
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.navbar-brand href="#" Project Two
+          .collapse.navbar-collapse
+            ul.nav.navbar-nav.pull-right
+              li
+                a href="/logout" Sign Out
+          /! /.nav-collapse
+      /! Begin page content
+      .container
+        .row
+          .col-lg-4.col-lg-offset-4
+            .page-header
+              h1 Please Sign In
+            .row
+              .col-lg-9
+                form role="form"
+                  .form-group
+                    label for="user_email" Email
+                    input#user_email.form-control name="user[email]" placeholder="Email address" type="text" value=""
+                  .form-group
+                    label for="user_password" Password
+                    input#user_password.form-control name="user[password]" placeholder="Password" type="password" value=""
+                  .form-group
+                    button.btn.btn-success type="submit" Sign In 
+                    |   
+                    button.btn.btn-warning type="button" Show Password
+    #footer
+      .container
+        p.text-muted.credit
+          a href="/privacy" Privacy Policy
+          |  &bull; 
+          a href="/terms" Terms Of Use
+          |  &bull;  &copy; 2013 by Emily
+    /! Placed at the end of the document so the pages load faster
+    script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
