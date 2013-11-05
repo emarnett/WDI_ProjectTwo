@@ -11,8 +11,26 @@ body {
   /* The html and body elements cannot have any padding or margin. */
 }
 
-h1 {
+h1, caption {
   font-size: 160%;
+  text-align: left;
+  margin-top:12px;
+  /*line-height: 200%;*/
+  /*border-bottom: 1px solid #ccc;*/
+}
+
+h2, legend {
+  text-align: left;
+  font-size: 130%;
+  line-height: 1.5;
+  color: #2c679b;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+h3 {
+  text-align: center;
+  font-size: 115%;
+  color: #2c679b;
 }
 
 /* Wrapper for page content to push down footer */
@@ -24,6 +42,16 @@ h1 {
   margin: 0 auto -60px;
   /* Pad bottom by footer height */
   padding: 0 0 60px;
+}
+
+.navbar-inverse, .navbar-inverse .navbar-brand {
+  background-color: rgba(33, 77, 115, 1);
+  color: #fff;
+  border-bottom: none;
+}
+
+form {
+  margin: 40px 0;
 }
 
 /* Set the fixed height of the footer here */
@@ -54,6 +82,104 @@ code {
   font-size: 80%;
 }
 
-.navbar-inverse .navbar-brand {
-  color: #EEE;
+#session-nav {
+  background-color: #f5f5f5;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: 100%;
+  margin-bottom: 0;
 }
+
+.login-options {
+  padding-left: 10px;
+}
+
+.profile-options {
+  padding-left: 3px;
+}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+  background-color: #2c679b;
+}
+
+.header-btn {
+  margin-top: 11px;
+  color: #428bca;
+  text-decoration: none;
+}
+
+.img-profile {
+  width: 100%;
+}
+
+.msg-btn {
+  margin-top: 10px;
+  margin-right:23px;
+}
+
+#portfolio {
+  margin: 20px 0;
+}
+
+#loginform, #registration-form {
+  margin-top: 40px;
+  }
+  
+#registrant-email {
+  font-size: 130%;
+  color: darkblue;
+}
+ 
+#pw-quality {
+  font-size: 14px;
+  margin-top: 93px;
+}
+ 
+.crack-div {
+  font-size: 14px;
+  margin-top: -10px;
+}
+
+#match-div {
+  font-size: 1.2em;
+  margin-top: 20px;
+  color: red;
+}
+ 
+#match-div.pmatch {
+  font-weight: bold;
+  color: green;
+}
+
+.strength-meter {
+  clear: both;
+}
+
+#page {
+  width: 90%;
+}
+
+#comment_text_area, #description-text-area {
+  height: 150px;
+}
+
+#description-text-area {
+  margin-top: 64px;
+}
+
+#addComment, #edit_image_form {
+  margin: 0;
+}
+
+#changeProfileForm {
+  margin:10px 0;
+}
+
+.no-padding-left {
+  padding-left: 0;
+}
+
+.no-padding-right {
+  padding-right: 0;
+}
+

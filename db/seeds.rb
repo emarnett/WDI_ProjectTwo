@@ -5,17 +5,17 @@ Registrant.create([
 	{
 		id: SecureRandom.urlsafe_base64,
 		email: "bob@munat.com",
-		expires_at: Time.now + 4.hours
+		expires_at: Time.now + 1.day
 	},
 	{
 		id: SecureRandom.urlsafe_base64,
 		email: "bill@munat.com",
-		expires_at: Time.now + 4.hours
+		expires_at: Time.now + 1.day
 	},
 	{
 		id: SecureRandom.urlsafe_base64,
 		email: "biff@munat.com",
-		expires_at: Time.now + 4.hours
+		expires_at: Time.now + 1.day
 	},
 ])
 

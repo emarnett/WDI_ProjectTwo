@@ -1,0 +1,142 @@
+.row
+  .col-lg-2.col-lg-offset-2	
+    div#profile_picture
+      -if @user_profile.image.thumb.url
+        = image_tag @user_profile.image.thumb.url, width: '100%'
+      -else
+        = image_tag 'person.jpg', width: '100%'
+      -if @user_profile == @current_user
+        div#edit_image
+          a Edit Profile Picture
+        div#show_edit_image_form
+          = form_for :user, url: profile_url, html: { role: "form", id:"edit_image_form" }, method: :put do |f|
+            .form-group
+              = f.file_field :image
+              div.col-lg-8.no-padding-left.no-padding-right
+                = f.submit 'Save Image', class:'btn btn-default' 
+              div.col-lg-4.no-padding-right.no-padding-left
+                button.btn.btn-default#cancel_edit_image Cancel
+
+  .col-lg-5
+    h1 #{@user_profile.name}
+    h4 #{@user_profile.profession}
+    p #{@user_profile.city}, #{@user_profile.country}
+    p #{@user_profile.description}
+    p
+  .col-lg-1
+    - if @user_profile.profile_name == @current_user.profile_name
+      button.btn.btn-default.header-btn.pull-right
+        = link_to "Edit my account", profile_url(@current_user.profile_name + '/edit')
+    - else
+      button.btn.btn-default.header-btn.pull-right
+        = link_to "Message Me", profile_url(@user_profile.profile_name)
+
+.row
+  .col-lg-6.col-lg-offset-3
+    .navbar#session-nav
+      .container
+        ul.nav.nav-pills.nav-justified.profile-options
+          li.active
+            a#portfolio-pill href="#" Portfolio
+          li
+            a#cv-pill href="#" R&eacute;sum&eacute;
+          li
+            a#comments-pill href="#" Recommendations
+.row
+  #portfolio
+    .row
+      .col-lg-3.col-lg-offset-1  
+        iframe allowfullscreen="" frameborder="0" height="315" src="//www.youtube.com/embed/BbD7r4-HcWE" width="560"
+      .col-lg-3.col-lg-offset-3
+        img.img-profile src="/assets/Zoolander.jpg"
+
+  #cv
+    == render partial: 'profiles/cv'
+                
+
+  #comments
+    .row
+      .col-lg-8.col-lg-offset-1  
+        h2 Recommendations
+        - if @user_profile.profile_name != @current_user.profile_name
+          div#addCommentForm
+            = form_for :user, url: profile_url, method: "PUT", remote: true, html: { id: "addComment", role: "form"} do |comment_form|
+              = comment_form.fields_for :recommendations do |f|
+                .row
+                  .col-lg-10.col-lg-offset-2 
+                    h3 Add a Recommendation for #{@user_profile.name}
+                    .form-group
+                      = f.text_area :comment, id: "comment_text_area", class: "form-control"
+                    .form-group
+                      => f.submit "Submit", class:"btn btn-success"
+      - if @user_profile.profile_name != @current_user.profile_name
+        .col-lg-2
+          button.btn.btn-default.header-btn#addCommentBtn Add Recommendation
+
+    div#comments_list
+      == render partial: 'profiles/comments'
+        
+
+
+javascript:
+  $(function() {
+    $('#cv').hide();
+    $('#comments').hide();
+    $('#addCommentForm').hide();
+    $('#edit_image').hide();
+    $('#show_edit_image_form').hide();
+
+    $('.profile-options').children('li').children('a').on('click', function(e) {
+      $('.profile-options').find('li').removeClass('active');
+      $(this).parent().addClass('active');
+
+      switch ($(this)[0].id) {
+        case 'cv-pill':
+          $('#portfolio').hide();
+          $('#cv').show();
+          $('#comments').hide();
+          break;
+        case 'comments-pill':
+          $('#portfolio').hide();
+          $('#cv').hide();
+          $('#comments').show();
+          break;
+        default:
+          $('#portfolio').show();
+          $('#cv').hide();
+          $('#comments').hide();
+      }
+      e.preventDefault();
+    });
+
+    $('#addCommentBtn').on('click', function() {
+      $('#addCommentForm').toggle();
+      $(this).text(function(i, text){
+        return text === "Add Recommendation" ? "Cancel" : "Add Recommendation";
+      });
+    });
+
+    function show_edit_link() {
+      $('#edit_image').show()
+    }
+
+    function hide_edit_link() {
+      $('#edit_image').hide()
+    }
+
+    $('#profile_picture').on('mouseover', show_edit_link).on('mouseout', hide_edit_link);
+
+    $('#edit_image').on('click', function() {
+      $('#edit_image').hide();
+      $('#show_edit_image_form').show();
+      $('#profile_picture').off('mouseover', show_edit_link).off('mouseout', hide_edit_link);
+    });
+
+    $('#cancel_edit_image').on('click', function(e) { 
+      $('#show_edit_image_form').hide();
+      $('#profile_picture').on('mouseover', show_edit_link).on('mouseout', hide_edit_link);
+      e.preventDefault();
+    });
+  });
+
+

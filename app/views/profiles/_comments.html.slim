@@ -1,0 +1,37 @@
+- @recommendations.each do |r|
+    #one_comment
+      .row
+        .col-lg-1.col-lg-offset-2
+          -if r.user.image.thumb.url
+            = link_to(image_tag(r.user.image.thumb.url, width: '100%'), profile_url(r.user.profile_name))
+          -else
+            = link_to(image_tag('person.jpg', width: '100%'), profile_url(r.user.profile_name))
+          p
+        .col-lg-2
+          p 
+          b = link_to "#{r.user.name}", profile_url(r.user.profile_name)
+          p     #{r.user.profession}
+          p
+        .col-lg-5
+          p
+          p #{r.comment}
+          -if @current_user == r.user
+            p
+            a#edit_comment Edit
+            '   
+          -if (@current_user == r.user) || (@current_user.profile_name == r.profile_name)
+            a#delete_comment Delete
+      .row
+        .col-lg-8.col-lg-offset-2
+          legend
+
+javascript:
+  $(function() {
+    $('#one_comment').on('click', '#edit_comment', function() {
+      console.log('edit');
+    }).on('click', '#delete_comment', function() {
+      console.log('delete');
+    });
+
+  });
+          

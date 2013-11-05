@@ -1,49 +1,18 @@
-doctype
-html
-  head
-    title Reset Password :: Project 2
-  body
-    /! Wrap all page content here
-    #wrap
-      /! Fixed navbar
-      .navbar.navbar-inverse.navbar-fixed-top
-        .container
-          .navbar-header
-            button.navbar-toggle data-target=".navbar-collapse" data-toggle="collapse" type="button"
-              span.icon-bar
-              span.icon-bar
-              span.icon-bar
-            a.navbar-brand href="#" Project Two
-          .collapse.navbar-collapse
-            ul.nav.navbar-nav.pull-right
-              li
-                a href="/logout" Sign Out
-          /! /.nav-collapse
-      /! Begin page content
-      .container
-        .row
-          .col-lg-4.col-lg-offset-4
-            .page-header
-              h1 Please choose a new password
-            .row
-              .col-lg-9
-                form role="form"
-                  .form-group
-                    label for="user_password" Password
-                    input#user_password.form-control name="user[password]" placeholder="Password" type="password" value=""
-                  .form-group
-                    label for="user_password_confirmation" Password Confirmation
-                    input#user_password_confirmation.form-control name="user[password_confirmation]" placeholder="Re-type Your Password" type="password" value=""
-                  .form-group
-                    button.btn.btn-success type="submit" Submit
-                    |   
-                    button.btn.btn-warning type="button" Show Passwords
-    #footer
-      .container
-        p.text-muted.credit
-          a href="/privacy" Privacy Policy
-          |  &bull; 
-          a href="/terms" Terms of Use
-          |  &bull;  &copy; 2013 by Emily
-    /! Placed at the end of the document so the pages load faster
-    script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+.row
+  .col-lg-4.col-lg-offset-4
+    = form_for :user, url: reset_url, method: :put, html: { role: "form"} do |f|
+      .row
+        .col-lg-9
+          fieldset
+            legend Please Reset Your Password       
+            .form-group
+              = f.label :password
+              = f.password_field :password, class: "form-control", placeholder: "Password"
+            .form-group
+              = f.label :password_confirmation
+              = f.password_field :password_confirmation, class: "form-control", placeholder: "Re-type Your Password"
+            .form-group
+              => f.submit "Submit", class:"btn btn-success"
+              button#show-password-button.btn.btn-warning data-state="show" Show Passwords
+
+== render partial: 'layouts/password'

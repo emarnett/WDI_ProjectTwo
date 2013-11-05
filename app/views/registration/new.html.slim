@@ -1,52 +1,108 @@
-doctype
-html
-  head
-    title Register :: Project 2
-  body
-    /! Wrap all page content here
-    #wrap
-      /! Fixed navbar
-      .navbar.navbar-inverse.navbar-fixed-top
-        .container
-          .navbar-header
-            button.navbar-toggle data-target=".navbar-collapse" data-toggle="collapse" type="button"
-              span.icon-bar
-              span.icon-bar
-              span.icon-bar
-            a.navbar-brand href="#" Project Two
-          .collapse.navbar-collapse
-            ul.nav.navbar-nav.pull-right
-              li
-                a href="/logout" Sign Out
-          /! /.nav-collapse
-      /! Begin page content
-      .container
+.row
+  #registration-form.row
+    .col-lg-8.col-lg-offset-2
+      = form_for :user, url: register_url, html: { role: "form" } do |f|
+        legend Please complete your registration
         .row
-          .col-lg-4.col-lg-offset-4
-            .page-header
-              h1 Please complete your registration
-            .row
-              .col-lg-9
-                form role="form"
-                  .form-group
-                    label for="user_name" Name
-                    input#user_name.form-control name="user[name]" placeholder="Name" type="text" value=""
-                  .form-group
-                    label for="user_password" Password
-                    input#user_password.form-control name="user[password]" placeholder="Password" type="password" value=""
-                  .form-group
-                    label for="user_password_confirmation" Password Confirmation
-                    input#user_password_confirmation.form-control name="user[password_confirmation]" placeholder="Re-type Your Password" type="password" value=""
-                  .form-group
-                    button.btn.btn-success type="submit" Submit
-                    |   
-                    button.btn.btn-warning type="button" Show Passwords
-    #footer
-      .container
-        p.text-muted.credit
-          a href="/privacy" Privacy Policy
-          |  &bull; 
-          a href="/terms" Terms of Use
-          |  &bull;  &copy; 2013 by Emily
-    /! Placed at the end of the document so the pages load faster
-    script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+          .col-lg-6      
+            .form-group
+              = f.label :name
+              = f.text_field :name, class: "form-control", placeholder: "Name"
+            .form-group
+              = f.file_field :image
+            .form-group
+              = f.label :profile_name
+              = f.text_field :profile_name, class: "form-control", placeholder: "Profile Name"
+            .form-group
+              = f.label :password
+              = f.password_field :password, class: "form-control", placeholder: "Password"
+            .form-group
+              = f.label :password_confirmation
+              = f.password_field :password_confirmation, class: "form-control", placeholder: "Re-type Your Password"
+            .form-group
+              = f.label :city
+              = f.text_field :city, class: "form-control", placeholder: "City"
+            .form-group
+              = f.label :country
+              = f.text_field :country, class: "form-control", placeholder: "Country"
+            .form-group
+              = f.label :profession
+              = f.text_field :profession, class: "form-control", placeholder: "Profession"
+            .form-group
+              input#hidden-strength type="hidden" name="strength" value="0"
+              => f.submit "Submit", class:"btn btn-success"
+              button#show-password-button.btn.btn-warning data-state="show" Show Passwords
+          .col-lg-6
+            label Email
+            #registrant-email = @registrant.email
+            p#pw-quality.pull-right Password too weak!
+            #pw-meter.strength-meter.progress.progress-striped
+              #strength-meter.meter.progress-bar.w-0 role="progressbar" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0"
+            .crack-div
+              strong Time to crack: &nbsp;
+              span#time-to-crack instant
+            #match-div
+
+== render partial: 'layouts/password'
+
+script src="/js/zxcvbn-async.js"
+
+javascript:
+  $(function() {
+    var checkMatch = function(event) {
+      var pw = $('#user_password').val();
+      var pc = $('#user_password_confirmation').val();
+      if (pw === pc) {
+        $('#match-div').html("Passwords match!").addClass('pmatch');
+      } else {
+        $('#match-div').html("Passwords don't match!").removeClass('pmatch');
+      }
+    };
+    
+    var setStrengthMeter = function(pw) {
+      var result = zxcvbn(pw);
+      var score = result.score;
+      var strength = (score / 4) * 100;
+      var color;
+      switch (score) {
+        case 1:
+          color = 'danger';
+          $('#pw-quality').html("Password too weak!");
+          break;
+        case 2:
+          color = 'warning';
+          $('#pw-quality').html("So-so");
+          break;
+        case 3:
+          color = 'success';
+          $('#pw-quality').html("Good");
+          break;
+        case 4:
+          color = 'info';
+          $('#pw-quality').html("Great!");
+          break;
+        default:
+          color = 'danger';
+          $('#pw-quality').html("Password too weak!");
+      }
+      
+      $('#time-to-crack').html(result.crack_time_display);
+      $('#strength-meter')
+        .removeClass('progress-bar-danger')
+        .removeClass('progress-bar-warning')
+        .removeClass('progress-bar-success')
+        .removeClass('progress-bar-info')
+        .addClass('progress-bar-' + color)
+        .css('width', strength + '%');
+    };
+    
+    $('#user_password_confirmation').on('keyup', checkMatch);
+  
+    $('#user_password').on('keyup', function(event) {
+      var pw = $(this).val();
+      try {
+        setStrengthMeter(pw);
+      } catch (e) {}
+      checkMatch();
+    });
+  });

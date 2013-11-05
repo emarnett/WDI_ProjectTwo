@@ -6,11 +6,96 @@
 	  thead
 	    tr
 	      th Name
+	      th Profile Name
 	      th Email
 	      th Created at
 	  tbody
 		- @users.each do |user|
 		  tr
 			th #{user.name}
+			td = link_to "#{user.profile_name}", profile_url(user.profile_name)
 			td #{user.email}
 			td #{user.created_at}
+	b Enter the name of a band:
+	input onchange="listAlbums(this.value)" type="text"
+  /! Get band name
+  hr
+    #output
+
+
+javascript:
+  function listAlbums(band) {     // Display albums by the specified band.
+    var query = [{'id': null,'type': '/music/artist', 'name': band, 'album': [{'name': null, 'release_date': null}] }];
+
+    var output = $("#output");                          // Output goes here
+    output.html("<h1>Albums by " + band + "</h1>");     // Display a title
+    
+    var service_url = 'https://www.googleapis.com/freebase/v1/mqlread';
+    $.getJSON(service_url + '?callback=?', {query:JSON.stringify(query)}, function(response) {
+     // $('<div>',{text:response.cursor}).appendTo(document.body);
+      // if (response.code == "/api/status/ok" &&        
+      //   response.result && response.result.album) { // Check for success...
+      var list = $("<ul>");                       // Make <ul> tag.
+      output.append(list.hide())                  // Keep it hidden
+      var albums = response.result.album; 
+      $.each(albums, function(i,album) {
+        $('<div>',{text:album.name}).appendTo(document.body); 
+      });       // Get albums.
+     // $.each(albums, function() {   
+      //  console.log(this.name);         // Loop through albums.
+      //  list.append($("<li>").html(this.name)); // Make <li> for each.
+      //});
+      //list.show("normal");                        // Reveal the list
+      //}
+      //else {                                          // On failure...
+      //output.append("Unknown band: " + band);     // Display message.
+      //}
+    });
+  }
+    //var envelope = {                       // The mqlread query envelope
+        //query : {                          // The MQL query 
+           // type: "/music/artist",         // Find a band
+           // name: band,                    // With the specified name
+           // album: [{                      // We want to know about albums
+            //    name:null,                 // Return album names
+            //    release_date:null,         // And release dates
+             //   sort: "release_date",      // Order by release date
+            //    "release_type!=":"single"  // Don't include singles
+          //  }]
+      //  }
+   // };
+
+    
+
+    // Invoke mqlread and call the function below when it is done.
+    // Adding callback=? to the URL makes jQuery do JSONP instead of XHR.
+    //jQuery.getJSON("https://www.googleapis.com/freebase/v1/mqlread?query=%7B'type':'/music/artist'%2C'name':'The%20Police'%2C'album':%5B%5D%7D", displayResults);
+                   // {query: JSON.stringify(envelope)},   // URL parameters
+                   // displayResults);                     // Callback function
+
+    // This function is invoked when we get the result of our MQL query
+    //function displayResults(response) {  
+      //  if (response.code == "/api/status/ok" &&        
+        //    response.result && response.result.album) { // Check for success...
+          //  var list = $("<ul>");                       // Make <ul> tag.
+          //  output.append(list.hide())                  // Keep it hidden
+           // var albums = response.result.album;         // Get albums.
+           // jQuery.each(albums, function() {            // Loop through albums.
+             //   list.append($("<li>").html(this.name)); // Make <li> for each.
+           // });
+            //list.show("normal");                        // Reveal the list
+     //   }
+       // else {                                          // On failure...
+         //   output.append("Unknown band: " + band);     // Display message.
+       // }
+   // }
+//  }
+
+  // var query = [{'id': null,'type': '/people/profession', 'name': null, "limit": 2500, "specializations": [], "specialization_of": [], "corresponding_type": [], "part_of_professional_field": [] }];
+  // var service_url = 'https://www.googleapis.com/freebase/v1/mqlread';
+  // $.getJSON(service_url + '?callback=?', {query:JSON.stringify(query)}, function(response) {
+  // 	$('<div>',{text:response.cursor}).appendTo(document.body);
+  //   $.each(response.result, function(i,profession){
+  //     $('<div>',{text:profession.name}).appendTo(document.body);
+  //   });
+  // });

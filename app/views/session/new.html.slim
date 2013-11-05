@@ -1,48 +1,62 @@
-doctype
-html
-  head
-    title Sign in :: Project 2
-  body
-    #wrap
-      /! Fixed navbar
-      .navbar.navbar-inverse.navbar-fixed-top
-        .container
-          .navbar-header
-            button.navbar-toggle data-target=".navbar-collapse" data-toggle="collapse" type="button"
-              span.icon-bar
-              span.icon-bar
-              span.icon-bar
-            a.navbar-brand href="#" Project Two
-          .collapse.navbar-collapse
-            ul.nav.navbar-nav.pull-right
-              li
-                a href="/logout" Sign Out
-          /! /.nav-collapse
-      /! Begin page content
+.row
+  .col-lg-4.col-lg-offset-4
+    .navbar#session-nav
       .container
-        .row
-          .col-lg-4.col-lg-offset-4
-            .page-header
-              h1 Please Sign In
-            .row
-              .col-lg-9
-                form role="form"
-                  .form-group
-                    label for="user_email" Email
-                    input#user_email.form-control name="user[email]" placeholder="Email address" type="text" value=""
-                  .form-group
-                    label for="user_password" Password
-                    input#user_password.form-control name="user[password]" placeholder="Password" type="password" value=""
-                  .form-group
-                    button.btn.btn-success type="submit" Sign In 
-                    |   
-                    button.btn.btn-warning type="button" Show Password
-    #footer
-      .container
-        p.text-muted.credit
-          a href="/privacy" Privacy Policy
-          |  &bull; 
-          a href="/terms" Terms Of Use
-          |  &bull;  &copy; 2013 by Emily
-    /! Placed at the end of the document so the pages load faster
-    script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+        ul.nav.nav-pills.login-options
+          li.active
+            a#login-pill href="#" Sign In
+          li
+            a#register-pill href="#" Register
+          li
+            a#reset-pill href="#" Reset Password
+
+
+    = form_for :user, url: login_url, method: "POST", html: { role: "form", id: "loginform"} do |f|
+      .row
+        .col-lg-8.col-lg-offset-2
+          fieldset
+            legend Please sign in
+            .form-group
+              = f.label :email
+              = f.text_field :email, class: "form-control", placeholder: "Email address"
+            .form-group
+              = f.label :password, id: "password-label"
+              = f.password_field :password, class: "form-control", placeholder: "Password"
+            .form-group
+              => f.submit "Sign In", class:"btn btn-success", id: "submit-button"
+              button#show-password-button.btn.btn-warning data-state="show" Show Password
+
+javascript:
+  $(function() {
+    $('.login-options li a').on('click', function(e) {
+      var id = e.currentTarget.id;
+      $('.login-options li').removeClass('active');
+      $($(this)[0].parentElement).addClass('active');
+
+      switch (id) {
+        case 'register-pill':
+          $('legend').html('Please enter your e-mail');
+          $('#user_password').hide();
+          $('#show-password-button').hide();
+          $('#submit-button').val('Send Email');
+          $('#password-label').hide();
+          break;
+        case 'reset-pill':
+          $('legend').html('Please enter your e-mail');
+          $('#user_password').hide();
+          $('#show-password-button').hide();
+          $('#submit-button').val('Send Email');
+          $('#password-label').hide();
+          break;
+        default:
+          $('legend').html('Please sign in'); 
+          $('#user_password').show(); 
+          $('#show-password-button').show(); 
+          $('#submit-button').val('Sign In');
+          $('#password-label').show();
+      }
+      e.preventDefault();
+    });
+  });
+
+== render partial: 'layouts/password'

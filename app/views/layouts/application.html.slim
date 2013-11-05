@@ -1,12 +1,35 @@
 doctype html
-html
+html lang="en"
   head
-    title WDIProjecttwo
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+
+    title Project Two
+    
     = csrf_meta_tags
 
     = stylesheet_link_tag    "application", media: "all"
-  body
-    == yield
-
     = javascript_include_tag "application"
+  body
+    #wrap
+      - if current_user
+        == render partial: 'layouts/navigation'
+      - else
+        == render partial: 'layouts/header'
+
+      .container#page
+        .page
+          == yield
+
+    #footer
+      .container
+        p.text-muted.credit
+          => link_to "Privacy Policy", privacy_url
+          ' &middot;
+          => link_to "Terms of Use", terms_url
+          ' &middot; &copy; 2013 Emily
+
+    == render partial: 'layouts/messages'
+
+    
 

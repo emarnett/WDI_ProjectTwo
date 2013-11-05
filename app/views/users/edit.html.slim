@@ -1,0 +1,24 @@
+.row
+  .col-lg-4.col-lg-offset-4
+    = form_for @current_user, url: user_url, method: "PUT", html: { role: "form"} do |f|
+      .row
+        .col-lg-10
+          fieldset
+            legend Edit your account details     
+            .form-group
+              = f.label :name
+              = f.text_field :name, class: "form-control", placeholder: "Name"
+            .form-group
+              = f.label :profile_name
+              = f.text_field :profile_name, class: "form-control", placeholder: "Profile Name"
+            .form-group
+              = f.label :city
+              = f.text_field :city, class: "form-control", placeholder: "City"
+            .form-group
+              = f.label :country
+              = f.text_field :country, class: "form-control", placeholder: "Country"
+            .form-group
+              = f.label :profession
+              = f.text_field :profession, class: "form-control", placeholder: "Profession"
+            .form-group
+              => f.submit "Submit", class:"btn btn-success"
