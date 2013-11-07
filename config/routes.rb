@@ -4,9 +4,7 @@ WDIProjecttwo::Application.routes.draw do
 
 	# match "/upload/grid/*path" => "gridfs#serve"
 	# get "/upload/grid/*path", to: 'gridfs#serve'
-	
-	#get 'registrants' => 'registrants#index'
-	#get 'registrants/:id' => 'registrants#show'
+
 	#sign in/out
 	get 	'login' => 'session#new', as: :login
 	post 	'login' => 'session#create'
@@ -30,11 +28,11 @@ WDIProjecttwo::Application.routes.draw do
   get 	'/:profile_name/edit' => 'profiles#edit'
 	put 	'/:profile_name' => 'profiles#update'
 	patch	'/:profile_name' => 'profiles#update'
+	delete '/:profile_name' => 'profiles#destroy'
 
 	get 	'/users/:profile_name' => 'users#edit', as: :user
 	put 	'/users/:profile_name' => 'users#update'
 	patch	'/users/:profile_name' => 'users#update'
-
 
 
 end

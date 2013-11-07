@@ -7,6 +7,11 @@ class User
 	mount_uploader :image, ImageUploader
 
 	has_many :recommendations
+	accepts_nested_attributes_for :recommendations
+
+	embeds_many :experiences
+	embeds_many :portfolio_images
+	embeds_many :portfolio_youtubevideos
 
 	field :id, type: String
 	field :profile_name, type: String

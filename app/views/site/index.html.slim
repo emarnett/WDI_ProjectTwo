@@ -16,31 +16,26 @@
 			td = link_to "#{user.profile_name}", profile_url(user.profile_name)
 			td #{user.email}
 			td #{user.created_at}
-	b Enter the name of a band:
-	input onchange="listAlbums(this.value)" type="text"
-  /! Get band name
-  hr
-    #output
 
 
-javascript:
-  function listAlbums(band) {     // Display albums by the specified band.
-    var query = [{'id': null,'type': '/music/artist', 'name': band, 'album': [{'name': null, 'release_date': null}] }];
+/ javascript:
+/   function listAlbums(band) {     // Display albums by the specified band.
+/     var query = [{'id': null,'type': '/music/artist', 'name': band, 'album': [{'name': null, 'release_date': null}] }];
 
-    var output = $("#output");                          // Output goes here
-    output.html("<h1>Albums by " + band + "</h1>");     // Display a title
+/     var output = $("#output");                          // Output goes here
+/     output.html("<h1>Albums by " + band + "</h1>");     // Display a title
     
-    var service_url = 'https://www.googleapis.com/freebase/v1/mqlread';
-    $.getJSON(service_url + '?callback=?', {query:JSON.stringify(query)}, function(response) {
-     // $('<div>',{text:response.cursor}).appendTo(document.body);
-      // if (response.code == "/api/status/ok" &&        
-      //   response.result && response.result.album) { // Check for success...
-      var list = $("<ul>");                       // Make <ul> tag.
-      output.append(list.hide())                  // Keep it hidden
-      var albums = response.result.album; 
-      $.each(albums, function(i,album) {
-        $('<div>',{text:album.name}).appendTo(document.body); 
-      });       // Get albums.
+/     var service_url = 'https://www.googleapis.com/freebase/v1/mqlread';
+/     $.getJSON(service_url + '?callback=?', {query:JSON.stringify(query)}, function(response) {
+/      // $('<div>',{text:response.cursor}).appendTo(document.body);
+/       // if (response.code == "/api/status/ok" &&        
+/       //   response.result && response.result.album) { // Check for success...
+/       var list = $("<ul>");                       // Make <ul> tag.
+/       output.append(list.hide())                  // Keep it hidden
+/       var albums = response.result.album; 
+/       $.each(albums, function(i,album) {
+/         $('<div>',{text:album.name}).appendTo(document.body); 
+/       });       // Get albums.
      // $.each(albums, function() {   
       //  console.log(this.name);         // Loop through albums.
       //  list.append($("<li>").html(this.name)); // Make <li> for each.

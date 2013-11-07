@@ -13,7 +13,7 @@
             .form-group
               = f.file_field :image
               div.col-lg-8.no-padding-left.no-padding-right
-                = f.submit 'Save Image', class:'btn btn-default' 
+                = f.submit 'Save Image', class:'btn btn-default', name:'save_profile_picture'
               div.col-lg-4.no-padding-right.no-padding-left
                 button.btn.btn-default#cancel_edit_image Cancel
 
@@ -24,7 +24,7 @@
     p #{@user_profile.description}
     p
   .col-lg-1
-    - if @user_profile.profile_name == @current_user.profile_name
+    - if @user_profile == @current_user
       button.btn.btn-default.header-btn.pull-right
         = link_to "Edit my account", profile_url(@current_user.profile_name + '/edit')
     - else
@@ -44,6 +44,14 @@
             a#comments-pill href="#" Recommendations
 .row
   #portfolio
+    .row
+      .col-lg-3.col-lg-offset-1 
+        -if @portfolio_images
+          - @portfolio_images.each do |p|
+            = image_tag p.portfolio_image.url, width: '100%'
+        -if @portfolio_youtubevideos  
+          - @portfolio_youtubevideos.each do |p|
+            iframe allowfullscreen="" frameborder="0" height="315" src="//www.youtube.com/embed/#{p.portfolio_youtubevideo}" width="560"
     .row
       .col-lg-3.col-lg-offset-1  
         iframe allowfullscreen="" frameborder="0" height="315" src="//www.youtube.com/embed/BbD7r4-HcWE" width="560"
@@ -137,6 +145,8 @@ javascript:
       $('#profile_picture').on('mouseover', show_edit_link).on('mouseout', hide_edit_link);
       e.preventDefault();
     });
+
+    
   });
 
 

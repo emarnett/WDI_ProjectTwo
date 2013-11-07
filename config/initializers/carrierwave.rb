@@ -1,7 +1,8 @@
-CarrierWave.configure do |config|
-  config.storage = :file
-  config.root = Rails.root.join('tmp')
-end
+# CarrierWave.configure do |config|
+#   config.storage = :file
+#   config.root = Rails.root.join('tmp')
+# end
+
 # CarrierWave.configure do |config|
 
 #   config.storage              = :grid_fs

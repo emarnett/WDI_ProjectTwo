@@ -25,12 +25,6 @@
       	= f.submit 'Save Changes', class:'btn btn-default'
       	button.btn.btn-default#cancel_edit_profile.pull-right 
       		a href="/#{@user_profile.profile_name}" Cancel
-  / .col-lg-1
-  /   button.btn.btn-default.header-btn.pull-right
-  /       = link_to "Edit my account", profile_url(@current_user.profile_name + '/edit')
-    / - else
-      	
-
 .row
   .col-lg-6.col-lg-offset-3
     .navbar#session-nav
@@ -43,13 +37,34 @@
           li
             a#comments-pill href="#" Recommendations
 .row
-  #portfolio
+  #portfolio 
     .row
       .col-lg-3.col-lg-offset-1  
-        iframe allowfullscreen="" frameborder="0" height="315" src="//www.youtube.com/embed/BbD7r4-HcWE" width="560"
-      .col-lg-3.col-lg-offset-3
-        img.img-profile src="/assets/Zoolander.jpg"
-
+      	- if @user_profile == @current_user
+          h3 Add an image
+          = form_for :user, url: profile_url, html: { role: "form"}, method: :put do |image_form|
+          	= image_form.fields_for :portfolio_images do |f|
+	            .form-group
+	              = f.file_field :portfolio_image
+	              = f.submit 'Save Image', class:'btn btn-default', name:'save_portfolio_image' 
+	              button.btn.btn-default#cancel_edit_image Cancel
+	        h3 Add a video
+          = form_for :user, url: profile_url, html: { role: "form"}, method: :put do |image_form|
+            = image_form.fields_for :portfolio_youtubevideos do |f|
+              = f.text_field :name, id:"temp_youtube_url"
+              button.btn.btn-default#parse_youtube_url Get Youtube id
+              = f.text_field :portfolio_youtubevideo, id:"youtube_id"             
+              = f.submit 'Save Video', class:'btn btn-default', name:'save_portfolio_youtubevideo'
+              button.btn.btn-default#cancel_edit_image Cancel
+		.row
+      .col-lg-3.col-lg-offset-1 
+        -if @portfolio_images
+          - @portfolio_images.each do |p|
+            = image_tag p.portfolio_image.url, width: '100%'
+        -if @portfolio_youtubevideos  
+          - @portfolio_youtubevideos.each do |p|
+            iframe allowfullscreen="" frameborder="0" height="315" src="//www.youtube.com/embed/#{p.portfolio_youtubevideo}" width="560"
+			  
   #cv
     == render partial: 'profiles/cv'
                 
@@ -58,7 +73,7 @@
     .row
       .col-lg-8.col-lg-offset-1  
         h2 Recommendations
-        - if @user_profile.profile_name != @current_user.profile_name
+        - if @user_profile != @current_user
           div#addCommentForm
             = form_for :user, url: profile_url, method: "PUT", remote: true, html: { id: "addComment", role: "form"} do |comment_form|
               = comment_form.fields_for :recommendations do |f|
@@ -69,7 +84,7 @@
                       = f.text_area :comment, id: "comment_text_area", class: "form-control"
                     .form-group
                       => f.submit "Submit", class:"btn btn-success"
-      - if @user_profile.profile_name != @current_user.profile_name
+      - if @user_profile != @current_user
         .col-lg-2
           button.btn.btn-default.header-btn#addCommentBtn Add Recommendation
 
@@ -138,6 +153,22 @@ javascript:
       e.preventDefault();
     });
 
+    function youtube_parser(url){
+      var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+      var match = url.match(regExp);
+      if (match&&match[7].length==11){
+          return match[7];
+      }else{
+          alert("Url incorrecta");
+      }
+    }
+
+    $('#parse_youtube_url').on('click', function(e) {
+    	e.preventDefault();
+    	var url = $('#temp_youtube_url').val();
+    	v = youtube_parser(url);
+    	$('#youtube_id').val(v);
+    })
     // $('#cancel_edit_profile').on('click', function(e) {
     //   e.preventDefault();
     // });

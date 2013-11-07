@@ -20,7 +20,7 @@
             a#edit_comment Edit
             '   
           -if (@current_user == r.user) || (@current_user.profile_name == r.profile_name)
-            a#delete_comment Delete
+            =link_to "Delete", profile_path(recommendation_id: r.id), method: :delete
       .row
         .col-lg-8.col-lg-offset-2
           legend
