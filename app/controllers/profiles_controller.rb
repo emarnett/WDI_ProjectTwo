@@ -25,6 +25,14 @@ class ProfilesController < ApplicationController
   def update
     @current_user = current_user 
     @user_profile = User.find_by(profile_name: params[:profile_name])
+    if params[:delete_this_id].present?
+      @recommendation = Recommendation.where(id: params[:delete_this_id])
+      @recommendation.destroy
+      @recommendations = Recommendation.where(profile_name: params[:profile_name]).sort_by { |h| h[:created_at] }.reverse!
+      respond_to do |format|
+          format.js
+      end
+    end
     if @current_user == @user_profile
       if params[:save_portfolio_image]
         @portfolio_image = @current_user.portfolio_images.create(portfolio_image: params[:user][:portfolio_images][:portfolio_image], name:'hi')
@@ -44,26 +52,27 @@ class ProfilesController < ApplicationController
           redirect_to profile_url
       end
     else
-      if params[:user][:recommendations][:comment].present?
-        @recommendation = @current_user.recommendations.create( profile_name: @user_profile.profile_name, 
-                              comment: params[:user][:recommendations][:comment])
-        @recommendation.save     
-        flash.now[:notice] = "Recommendation added!"
+      if params[:save_comment]
+        if params[:user][:recommendations][:recommendation_id].present?
+          @recommendation = Recommendation.where(id: params[:user][:recommendations][:recommendation_id])
+          @recommendation.update(comment: params[:user][:recommendations][:comment])
+        else
+          @recommendation = @current_user.recommendations.create( profile_name: @user_profile.profile_name, 
+                                comment: params[:user][:recommendations][:comment])    
+          @recommendation.save
+        end
+        
         @recommendations = Recommendation.where(profile_name: params[:profile_name]).sort_by { |h| h[:created_at] }.reverse!
         respond_to do |format|
           format.js
         end
       end
-    end   
+    end
+
+
   end
 
   private
-
-  def image_param
-    params.require(:user).permit(
-      :image
-    )
-  end
 
   def user_params
     params.require(:user).permit(

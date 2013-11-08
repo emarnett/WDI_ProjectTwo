@@ -44,45 +44,13 @@
             a#comments-pill href="#" Recommendations
 .row
   #portfolio
-    .row
-      .col-lg-3.col-lg-offset-1 
-        -if @portfolio_images
-          - @portfolio_images.each do |p|
-            = image_tag p.portfolio_image.url, width: '100%'
-        -if @portfolio_youtubevideos  
-          - @portfolio_youtubevideos.each do |p|
-            iframe allowfullscreen="" frameborder="0" height="315" src="//www.youtube.com/embed/#{p.portfolio_youtubevideo}" width="560"
-    .row
-      .col-lg-3.col-lg-offset-1  
-        iframe allowfullscreen="" frameborder="0" height="315" src="//www.youtube.com/embed/BbD7r4-HcWE" width="560"
-      .col-lg-3.col-lg-offset-3
-        img.img-profile src="/assets/Zoolander.jpg"
+    == render partial: 'profiles/portfolio'
 
   #cv
     == render partial: 'profiles/cv'
                 
-
   #comments
-    .row
-      .col-lg-8.col-lg-offset-1  
-        h2 Recommendations
-        - if @user_profile.profile_name != @current_user.profile_name
-          div#addCommentForm
-            = form_for :user, url: profile_url, method: "PUT", remote: true, html: { id: "addComment", role: "form"} do |comment_form|
-              = comment_form.fields_for :recommendations do |f|
-                .row
-                  .col-lg-10.col-lg-offset-2 
-                    h3 Add a Recommendation for #{@user_profile.name}
-                    .form-group
-                      = f.text_area :comment, id: "comment_text_area", class: "form-control"
-                    .form-group
-                      => f.submit "Submit", class:"btn btn-success"
-      - if @user_profile.profile_name != @current_user.profile_name
-        .col-lg-2
-          button.btn.btn-default.header-btn#addCommentBtn Add Recommendation
-
-    div#comments_list
-      == render partial: 'profiles/comments'
+    == render partial: 'profiles/comments'
         
 
 
@@ -115,13 +83,6 @@ javascript:
           $('#comments').hide();
       }
       e.preventDefault();
-    });
-
-    $('#addCommentBtn').on('click', function() {
-      $('#addCommentForm').toggle();
-      $(this).text(function(i, text){
-        return text === "Add Recommendation" ? "Cancel" : "Add Recommendation";
-      });
     });
 
     function show_edit_link() {

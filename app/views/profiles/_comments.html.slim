@@ -1,5 +1,25 @@
-- @recommendations.each do |r|
-    #one_comment
+.row
+  .col-lg-8.col-lg-offset-1  
+    h2 Recommendations
+    - if @user_profile != @current_user
+      div#addCommentForm
+        = form_for :user, url: profile_url, method: "PUT", remote: true, html: { id: "addComment", role: "form"} do |comment_form|
+          = comment_form.fields_for :recommendations do |f|
+            .row
+              .col-lg-10.col-lg-offset-2 
+                h3#commentFormTitle Add a Recommendation for #{@user_profile.name}
+                .form-group
+                  = f.text_area :comment, id: "comment_text_area", class: "form-control"
+                  = f.hidden_field :recommendation_id, id: "comment_id_hidden_field"
+                .form-group
+                  => f.submit "Submit", class:"btn btn-success", name:'save_comment'
+  - if @user_profile != @current_user
+    .col-lg-2
+      button.btn.btn-default.header-btn#addCommentBtn Add Recommendation
+
+div#comments_list
+  - @recommendations.each do |r|
+    .one_comment data-comment_id="#{r.id}" data-comment_content="#{r.comment}"
       .row
         .col-lg-1.col-lg-offset-2
           -if r.user.image.thumb.url
@@ -17,21 +37,39 @@
           p #{r.comment}
           -if @current_user == r.user
             p
-            a#edit_comment Edit
+            a.edit_comment Edit
             '   
           -if (@current_user == r.user) || (@current_user.profile_name == r.profile_name)
-            =link_to "Delete", profile_path(recommendation_id: r.id), method: :delete
+            = link_to "Delete", profile_path(:delete_this_id => r.id), remote: true, method: :put
       .row
         .col-lg-8.col-lg-offset-2
           legend
 
 javascript:
   $(function() {
-    $('#one_comment').on('click', '#edit_comment', function() {
-      console.log('edit');
-    }).on('click', '#delete_comment', function() {
+    $('.one_comment').on('click', '.edit_comment', function() {
+      $('#addCommentForm').show();
+      $('#addCommentBtn').text("Cancel");
+      $('#commentFormTitle').text('Edit Your Recommendation for #{@user_profile.name}')
+      var recommendation_id = $(this).closest('.one_comment').data('comment_id');
+      var comment = $(this).closest('.one_comment').data('comment_content');
+      $('#comment_text_area').val(comment);
+      $("#comment_id_hidden_field").val(recommendation_id);
+
+    }).on('click', '.delete_comment', function() {
       console.log('delete');
     });
 
+    $('#addCommentBtn').on('click', function() {
+      var comment_button_value = $(this).text();
+      console.log(comment_button_value);
+      $('#addCommentForm').toggle();
+      $(this).text(function(i, text){
+        return text === "Add Recommendation" ? "Cancel" : "Add Recommendation";
+      });
+      $('#commentFormTitle').text("Add a Recommendation for #{@user_profile.name}");
+      $('#comment_text_area').val('');
+      $('#comment_id_hidden_field').val('');
+    });
   });
           
